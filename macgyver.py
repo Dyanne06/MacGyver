@@ -34,10 +34,9 @@ laby.create()
 laby.show(board_game)
 
 #Make the personnage
-mg = Perso(laby.start[0], laby.start[1])
-print (mg.col)
-print (mg.row)
-board_game.blit(mg.perso, (mg.col * size_sprite, mg.row * size_sprite))
+mg = Perso()
+mg.position_perso = mg.position_perso.move(laby.start[0],laby.start[1])
+board_game.blit(mg.perso, mg.position_perso)
 
 pygame.display.flip()
 
@@ -69,7 +68,7 @@ while again:
 			elif event.key == K_DOWN:
 				mg.move('Down', laby.struct)
 			laby.show(board_game)
-			board_game.blit(mg.perso, (mg.col * size_sprite, mg.row * size_sprite))
+			board_game.blit(mg.perso, mg.position_perso)
 			pygame.display.flip()
 
 #os.system("pause")

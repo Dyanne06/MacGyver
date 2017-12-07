@@ -51,42 +51,59 @@ class Labyrinthe:
 					board_game.blit(end, (x,y))
 				if column == 'd':
 					board_game.blit(start, (x,y))
-					self.start = (n_col,n_row)
+					self.start = (x,y)
 				n_col += 1
 			n_row += 1
 
 class Perso:
 	'''Class of personnage'''
 
-	def __init__(self, col, row):
+	def __init__(self):
 		self.name = name_perso
 		self.perso = pygame.image.load(picture_perso_right).convert_alpha()
-		self.col = col # abscisse
-		self.row = row # ordonnée
+		self.position_perso = self.perso.get_rect()
 
 	def x_translate(self):
-		x = self.col * size_sprite
-		return x
+		col = 0
+		row = 0
+		x = self.position_perso[0]
+		y = self.position_perso[1]
+		if x != 0:
+			col = int(x/size_sprite)
+		if y != 0:
+			row = int(y/size_sprite)
+		return col
 
 	def y_translate(self):
-		y = self.row * size_sprite
-		return y
+		y = self.position_perso.move(size_sprite, 0)[1]
+		if y != 0:
+			return int(y/size_sprite)
+		else:
+			return 0
 
 	def move(self, direction, tab):
 		''' move the personnage '''
 		if direction == 'Right':
-			if self.col < (number_sprite_side - 1):
-				if tab[self.row][self.col+1] == char_start or tab[self.row][self.col+1] == char_zero:
-					self.col += 1
+			col = self.x_translate()+1
+			row = self.y_translate()
+			if col < number_sprite_side and (tab[row][col] == char_start or tab[row][col] == char_zero):
+				self.position_perso = self.position_perso.move(size_sprite, 0)
+				self.perso = pygame.image.load(picture_perso_right).convert_alpha()
 		if direction == 'Left':
-			if self.col > 0:
-				if tab[self.row][self.col-1] == char_start or tab[self.row][self.col-1] == char_zero:
-					self.col -= 1
+			col = self.x_translate()-1
+			row = self.y_translate()
+			if (col >=0) and (tab[row][col] == char_start or tab[row][col] == char_zero):
+				self.position_perso = self.position_perso.move(-size_sprite, 0)
+				self.perso = pygame.image.load(picture_perso_left).convert_alpha()
 		if direction == 'Up':
-			if self.row > 0:
-				if tab[self.row-1][self.col] == char_start or tab[self.row-1][self.col] == char_zero:
-					self.row -= 1
+			col = self.x_translate()
+			row = self.y_translate()-1
+			if row >= 0 and (tab[row][col] == char_start or tab[row][col] == char_zero):
+				self.position_perso = self.position_perso.move(0, -size_sprite)
+				self.perso = pygame.image.load(picture_perso_right).convert_alpha()
 		if direction == 'Down':
-			if self.row < (number_sprite_side - 1):
-				if tab[self.row+1][self.col] == char_start or tab[self.row+1][self.col] == char_zero:
-					self.row += 1
+			col = self.x_translate()
+			row = self.y_translate()+1
+			if row < number_sprite_side and (tab[row][col] == char_start or tab[row][col] == char_zero):
+				self.position_perso = self.position_perso.move(0, size_sprite)
+				self.perso = pygame.image.load(picture_perso_right).convert_alpha()
