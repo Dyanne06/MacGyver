@@ -31,24 +31,29 @@ pygame.display.set_caption (title_window)
 #the objetc Labyrinthe is the structure (list)
 laby = Labyrinthe(laby_file_data)
 laby.create()
+#laby.show(board_game)
+
+#Create elements
+ks = KitSurvey(laby.struct_OK)
+laby.modify_struct(ks.tools['seringue'], char_tools['seringue'])
+laby.modify_struct(ks.tools['tube'], char_tools['tube'])
+laby.modify_struct(ks.tools['ether'], char_tools['ether'])
 laby.show(board_game)
 
-#Make the personnage
-mg = Perso(laby.start[0], laby.start[1])
-print (mg.col)
-print (mg.row)
+#Make the personnag
+mg = Perso(picture_perso_right, laby.start[0], laby.start[1])
 board_game.blit(mg.perso, (mg.col * size_sprite, mg.row * size_sprite))
 
+#refresh
 pygame.display.flip()
 
-again = True
-
 #the main game loop
+again = True
 pygame.key.set_repeat(100,10)
 
 while again:
 
-	pygame.time.Clock().tick(TPS)
+	pygame.time.Clock().tick(FPS)
 
 	#Création du personnage
 	#pass
