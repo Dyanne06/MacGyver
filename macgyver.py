@@ -7,8 +7,6 @@ otherwise he dies!
 Scripts Python
 file: macgyver.py, classes.py, constants.py
 directory: Pictures, Sounds
-
-
 '''
 import time
 import pygame
@@ -85,35 +83,36 @@ while AGAIN:
                 gain = pygame.image.load(KITSURVEY[tool])
                 BOARD_GAME.blit(gain, (SIZE_SPRITE, SIZE_SPRITE * nb))
 
-            # if he caught the
+            # with the survival kit, mac gyver make a syringe
             if len(the_mg.kit) == len(KITSURVEY):
                 img_seringue = pygame.image.load(PICTURE_SERINGUE)
                 BOARD_GAME.blit(img_seringue, (SIZE_SPRITE, (NUMBER_SPRITE_SIDE-2)*SIZE_SPRITE))
 
             pygame.display.flip()
 
+        # Display GameOver
         if the_mg.nb_life != NB_LIFE_PERSO:
-            gameover = pygame.image.load (PICTURE_GAMEOVER)
+            gameover = pygame.image.load(PICTURE_GAMEOVER)
             BOARD_GAME.blit(gameover, (SIZE_SPRITE, SIZE_SPRITE))
             pygame.display.flip()
 
+        # Display pictures and sounds if the heroe won
         if the_mg.nb_life > 1:
             AGAIN = False
             sound = pygame.mixer.Sound(SOUND_WIN)
             sound.play()
             sound.fadeout(2500)
-            gamewin = pygame.image.load (PICTURE_YOUWIN)
+            gamewin = pygame.image.load(PICTURE_YOUWIN)
             BOARD_GAME.blit(gamewin, (SIZE_SPRITE, (NUMBER_SPRITE_SIDE-2)*SIZE_SPRITE))
             pygame.display.flip()
             time.sleep(5)
-            #Improve: Display a win game
 
+        # Display pictures and sounds if the heroe lost
         if the_mg.nb_life < 1:
             AGAIN = False
             sound = pygame.mixer.Sound(SOUND_LOSE)
             sound.play()
-            gamelose = pygame.image.load (PICTURE_YOULOSE)
-            BOARD_GAME.blit(gamelose,  (SIZE_SPRITE, (NUMBER_SPRITE_SIDE-2)*SIZE_SPRITE))
+            gamelose = pygame.image.load(PICTURE_YOULOSE)
+            BOARD_GAME.blit(gamelose, (SIZE_SPRITE, (NUMBER_SPRITE_SIDE-2)*SIZE_SPRITE))
             pygame.display.flip()
             time.sleep(5)
-    #Afficher un game over

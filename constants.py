@@ -35,7 +35,8 @@ SOUND_TAKE = "Sounds/kongas.wav"
 SOUND_SLEEP = "Sounds/whiff.wav"
 SOUND_CATCH = "Sounds/punch.wav"
 
-#description of file for build a labyrinth
+# description of file for build a labyrinth
+# we can improve with json for later
 LABY_FILE_DATA = "FileForGames/laby1"
 CHAR_LABY = {'OK': ('0', ""), \
              'Wall': ('m', "Pictures/wall.jpg"), \
