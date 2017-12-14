@@ -1,15 +1,19 @@
 # -*- coding: Latin-1 -*
 '''
-Liste des classes d'objets pour le jeu MacGyver
+Set of classes
 '''
 import time
 import random
 import pygame
 from pygame.locals import *
-from structure import *
+from constants import *
 
 class Labyrinthe:
-    ''' classe pour créer le labyrinthe'''
+    ''' this class contains the contructor __init__ and 3 methods
+    1) self.create for read the file and put it in the array list_struct
+    2) self.modify_struct for add another character in the array
+    3) self.show for display the labyrithe in the window
+    '''
     def __init__(self, fichier):
 	    self.fichier = fichier
 	    self.struct = []
@@ -30,7 +34,6 @@ class Labyrinthe:
 					    row_laby.append(f_column)
 					    n_column +=1
 					    if f_column == CHAR_LABY['OK'][0]:
-						    print (CHAR_LABY['OK'][0])
 						    self.struct_OK.append((n_column, n_row))
 			    list_struct.append(row_laby)
 			#print(list_struct )
@@ -73,7 +76,11 @@ class Labyrinthe:
 		    n_row += 1
 
 class Perso:
-	'''Class of personnage'''
+	''' this class contains the contructor __init__ and 3 methods
+    1) self.move for move the personnage
+    2) self.modify_struct for add another character in the array
+    3) self.show for display the labyrithe in the window
+    '''
 	def __init__(self, picture, col, row):
 	    self.name = NAME_PERSO
 	    self.perso = pygame.image.load(picture).convert_alpha()
@@ -111,28 +118,27 @@ class Perso:
 					self.ctrl_pos(tab)
 
 	def ctrl_pos(self, tab):
-		# A améliorer pour faire en fonction du kit => parcourir KITSURVEY
 		for obj in KITSURVEY.keys():
 			if tab[self.row][self.col] == obj:
-				son = pygame.mixer.Sound("sons/kongas.wav")
-				son.play()
-				son.fadeout(2500) #Fondu à 2,5s de la fin de l'objet "son"
+				sound = pygame.mixer.Sound(SOUND_TAKE)
+				sound.play()
+				sound.fadeout(2500) #Fondu à 2,5s de la fin de l'objet "son"
 				self.kit.append(obj)
 				tab[self.row][self.col]='0'
 		if tab[self.row][self.col] == 'a':
 			if len(self.kit) == len(KITSURVEY):
-				son = pygame.mixer.Sound("sons/whiff.wav")
-				son.play()
+				sound = pygame.mixer.Sound(SOUND_SLEEP)
+				sound.play()
 				time.sleep(1)
 				self.nb_life += 1
 			else:
-				son = pygame.mixer.Sound("sons/punch.wav")
-				son.play()
+				sound = pygame.mixer.Sound(SOUND_CATCH)
+				sound.play()
 				time.sleep(1)
 				self.nb_life -= 1
 
 class KitSurvey:
-	""" list of elements in order to exit"""
+	""" list of elements for exit"""
 	def __init__(self, struct_laby_OK):
 		self.tools = {'A': random.choice(struct_laby_OK), \
 					  'T': random.choice(struct_laby_OK), \

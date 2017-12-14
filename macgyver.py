@@ -1,65 +1,70 @@
 # -*- coding: Latin-1 -*
 '''
-Jeu Mac Gyver - Jeu de Labyrinthe avec saisi d'objets avant de sortir
+Gameplay Mac Gyver -
+Explanation: Mac Gyver must take 3 objets for send to sleep the guardian (Murdoc) and exit
+otherwise he dies!
 
-Script Python
-Fichiers: macgyver.py, classes.py, constantes.py
+Scripts Python
+file: macgyver.py, classes.py, constants.py
+directory: Pictures, Sounds
+
 
 '''
 import time
 import pygame
 from pygame.locals import *
-from structure import *
 from classes import *
+from constants import *
 
-#initialisation all pygames's module
+#initialisation pygames
 pygame.init()
 
-# create an object "Surface"
+# create an object "Surface" for the gameplay
 BOARD_GAME = pygame.display.set_mode((BOARD_SIZE + BORDURE, BOARD_SIZE))
-#we load images
+# icon : load image and display
 IMG_PERSO = pygame.image.load(PICTURE_ICON)
-#icon
 pygame.display.set_icon(IMG_PERSO)
-#title
+# title : display
 pygame.display.set_caption(TITLE_WINDOW)
 
-#Génération du plateau de jeu
-#laby_struct is a file define in structure
-#the objetc Labyrinthe is the structure (list)
+# Create the labyrinthe
+# LABY_FILE_DATA is the file with the structure of the labyrinthe
 the_laby = Labyrinthe(LABY_FILE_DATA)
 the_laby.create()
-#laby.show(board_game)
 
-#Create elements
+# add elements for help the personnage to exit
 the_ks = KitSurvey(the_laby.struct_OK)
 the_laby.modify_struct(the_ks.tools['A'], 'A')
 the_laby.modify_struct(the_ks.tools['T'], 'T')
 the_laby.modify_struct(the_ks.tools['E'], 'E')
+
+# Display the labyrinth
 the_laby.show(BOARD_GAME)
 
-#Make the personnag
+# add the heroe
 the_mg = Perso(PICTURE_PERSO_RIGHT, the_laby.start[0], the_laby.start[1])
 BOARD_GAME.blit(the_mg.perso, ((the_mg.col * SIZE_SPRITE) + BORDURE, the_mg.row * SIZE_SPRITE))
 
 #refresh
 pygame.display.flip()
 
+#parameter for play with the keys pressed
+pygame.key.set_repeat(100, 10)
+#parameter for refresh
+pygame.time.Clock().tick(FPS)
+
 #the main game loop
 AGAIN = True
-pygame.key.set_repeat(100, 10)
-
 while AGAIN:
-
-    pygame.time.Clock().tick(FPS)
 
     for event in pygame.event.get():
 
+        # events of keybord
         if event.type == QUIT:
-            again = False
+            AGAIN = False
         elif event.type == KEYDOWN:
             if event.key == K_ESCAPE or event.key == K_SPACE:
-                again = False
+                AGAIN = False
             elif event.key == K_RIGHT:
                 the_mg.move('Right', the_laby.struct)
             elif event.key == K_LEFT:
@@ -68,34 +73,47 @@ while AGAIN:
                 the_mg.move('Up', the_laby.struct)
             elif event.key == K_DOWN:
                 the_mg.move('Down', the_laby.struct)
+            # display the labyrinthe with the new position of personnage
+            # the constant BORDURE is for display the elements and message of end
             the_laby.show(BOARD_GAME)
             BOARD_GAME.blit(the_mg.perso, \
                 ((the_mg.col * SIZE_SPRITE)+BORDURE, the_mg.row * SIZE_SPRITE))
-            nb = 0
 
+            # count and display the element caught by MG
             for tool in the_mg.kit:
+                nb = the_mg.kit.index(tool) + 1 #the index starts with 0
                 gain = pygame.image.load(KITSURVEY[tool])
-                nb = the_mg.kit.index(tool) + 1
                 BOARD_GAME.blit(gain, (SIZE_SPRITE, SIZE_SPRITE * nb))
 
-            if nb == 3:
+            # if he caught the
+            if len(the_mg.kit) == len(KITSURVEY):
                 img_seringue = pygame.image.load(PICTURE_SERINGUE)
+                BOARD_GAME.blit(img_seringue, (SIZE_SPRITE, (NUMBER_SPRITE_SIDE-2)*SIZE_SPRITE))
 
+            pygame.display.flip()
+
+        if the_mg.nb_life != NB_LIFE_PERSO:
+            gameover = pygame.image.load (PICTURE_GAMEOVER)
+            BOARD_GAME.blit(gameover, (SIZE_SPRITE, SIZE_SPRITE))
             pygame.display.flip()
 
         if the_mg.nb_life > 1:
             AGAIN = False
-            son = pygame.mixer.Sound("sons/gong.wav")
-            son.play()
-            son.fadeout(2500)
-            BOARD_GAME.blit(img_seringue, (SIZE_SPRITE, (NUMBER_SPRITE_SIDE-2)*SIZE_SPRITE))
+            sound = pygame.mixer.Sound(SOUND_WIN)
+            sound.play()
+            sound.fadeout(2500)
+            gamewin = pygame.image.load (PICTURE_YOUWIN)
+            BOARD_GAME.blit(gamewin, (SIZE_SPRITE, (NUMBER_SPRITE_SIDE-2)*SIZE_SPRITE))
             pygame.display.flip()
             time.sleep(5)
             #Improve: Display a win game
 
         if the_mg.nb_life < 1:
             AGAIN = False
-            son = pygame.mixer.Sound("sons/falling.wav")
-            son.play()
+            sound = pygame.mixer.Sound(SOUND_LOSE)
+            sound.play()
+            gamelose = pygame.image.load (PICTURE_YOULOSE)
+            BOARD_GAME.blit(gamelose,  (SIZE_SPRITE, (NUMBER_SPRITE_SIDE-2)*SIZE_SPRITE))
+            pygame.display.flip()
             time.sleep(5)
     #Afficher un game over
