@@ -2,12 +2,16 @@
 '''
 Set of game constants
 '''
+import pygame
+
+pygame.init()
 # General
 SIZE_SPRITE = 32
 NUMBER_SPRITE_SIDE = 15
 BOARD_SIZE = NUMBER_SPRITE_SIDE*SIZE_SPRITE
-BORDURE = SIZE_SPRITE * 4
+BORDER = SIZE_SPRITE * 4
 
+BOARD_GAME = pygame.display.set_mode((BOARD_SIZE + BORDER, BOARD_SIZE))
 TITLE_WINDOW = "MacGyver - Labyrinthe contre Murdoc"
 NAME_PERSO = 'MacGyver'
 NB_LIFE_PERSO = 1
@@ -16,24 +20,23 @@ NB_LIFE_PERSO = 1
 FPS = 30
 
 # Pictures
-PICTURE_ICON = "Pictures/macgyver_right.png"
-PICTURE_HOME = "Pictures/fond.png"
-PICTURE_FOND = "Pictures/background.png"
-PICTURE_PERSO_RIGHT = "Pictures/macgyver_right.png"
-#PICTURE_PERSO_LEFT = "Pictures/macgyver_left.png"
-PICTURE_BAD_PERSO = "Pictures/murdoc.png"
-PICTURE_SERINGUE = "Pictures/seringue.png"
-
-PICTURE_YOUWIN = "Pictures/YouWin.png"
-PICTURE_YOULOSE = "Pictures/YouLost.png"
-PICTURE_GAMEOVER =  "Pictures/GameOver.png"
-
+PICTURES = {'HEROE' : pygame.image.load("Pictures/macgyver.png").convert_alpha(),
+            'BACKGROUND' : pygame.image.load("Pictures/fond.png"),
+            'WALL' : pygame.image.load("Pictures/wall.jpg").convert(),
+            'START': pygame.image.load("Pictures/macgyver_trace.png").convert_alpha(),
+            'END' : pygame.image.load("Pictures/murdoc.png").convert_alpha(),
+            'YOUWIN' : pygame.image.load("Pictures/YouWin.png"),
+            'YOULOSE' : pygame.image.load("Pictures/YouLost.png"),
+            'TUBE': pygame.image.load("Pictures/tube.png").convert_alpha(),
+            'ETHER': pygame.image.load("Pictures/ether.png").convert_alpha(),
+            'NEEDLE': pygame.image.load("Pictures/aiguille.png").convert_alpha()}
 #Sounds
-SOUND_WIN = "Sounds/gong.wav"
-SOUND_LOSE = "Sounds/falling.wav"
-SOUND_TAKE = "Sounds/kongas.wav"
-SOUND_SLEEP = "Sounds/whiff.wav"
-SOUND_CATCH = "Sounds/punch.wav"
+SOUND = {'WIN' : "Sounds/gong.wav",
+         'LOSE' : "Sounds/falling.wav",
+         'TAKE' : "Sounds/kongas.wav",
+         'SLEEP' : "Sounds/whiff.wav",
+         'CATCH' : "Sounds/punch.wav"
+         }
 
 # description of file for build a labyrinth
 # we can improve with json for later
