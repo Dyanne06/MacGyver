@@ -82,7 +82,7 @@ class Labyrinthe:
 class Perso:
     """ this class contains the contructor __init__ and 2 methods
     1) self.move : move the personnage (only coordinate of the personna)
-    2) self.ctrl_pos :
+    2) self.catch_obj :
     """
 
     def __init__(self, col, row):
@@ -102,24 +102,24 @@ class Perso:
                 # MG can advance if it's not a wall or the bad perso
                 if tab[self.row][self.col+1] != CHAR_LABY['Wall'][0]:
                     self.col += 1
-                    self.ctrl_pos(tab)
+                    self.catch_obj(tab)
         if direction == 'Left':
             if self.col > 0:
                 if tab[self.row][self.col-1] != CHAR_LABY['Wall'][0]:
                     self.col -= 1
-                    self.ctrl_pos(tab)
+                    self.catch_obj(tab)
         if direction == 'Up':
             if self.row > 0:
                 if tab[self.row-1][self.col] != CHAR_LABY['Wall'][0]:
                     self.row -= 1
-                    self.ctrl_pos(tab)
+                    self.catch_obj(tab)
         if direction == 'Down':
             if self.row < (NUMBER_SPRITE_SIDE - 1):
                 if tab[self.row+1][self.col] != CHAR_LABY['Wall'][0]:
                     self.row += 1
-                    self.ctrl_pos(tab)
+                    self.catch_obj(tab)
 
-    def ctrl_pos(self, tab):
+    def catch_obj(self, tab):
         """method for catch a object or make an action if the heroe is on the bad persona
         if he has the 3 elements then he win a life else he lost a life
         """
@@ -136,8 +136,10 @@ class Perso:
                 sound.play()
                 time.sleep(1)
                 self.nb_life += 1
+                tab[self.row][self.col] = '0'
             else:
                 sound = pygame.mixer.Sound(SOUND['CATCH'])
                 sound.play()
                 time.sleep(1)
                 self.nb_life -= 1
+                tab[self.row][self.col] = 'a'
