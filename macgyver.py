@@ -17,7 +17,7 @@ from classes import Labyrinthe, Perso
 from constants import *
 
 #initialisation pygames
-pygame.init()
+pygame.display.init()
 
 # icon :
 pygame.display.set_icon(PICTURES['HEROE'])
@@ -48,9 +48,9 @@ pygame.time.Clock().tick(FPS)
 
 #the main game loop
 AGAIN = True
-while AGAIN:
+while AGAIN: #boucle d'événements
 
-    for event in pygame.event.get():
+    for event in pygame.event.get(): #Parcours de la liste des événements
 
         # events of keybord
         if event.type == QUIT:
